@@ -1,0 +1,10 @@
+SELECT ?smartphone ?smartphoneLabel ?country ?countryLabel ?releaseDate ?os ?osLabel
+WHERE {
+  ?smartphone wdt:P31 wd:Q19723451;  # Экземпляр смартфона
+               wdt:P17 ?country;  # Страна производителя
+               wdt:P577 ?releaseDate;  # Дата выпуска
+               wdt:P306 ?os.  # Операционная система
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],ru". }
+}
+ORDER BY DESC(?releaseDate)
+LIMIT 100
