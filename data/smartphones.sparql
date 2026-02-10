@@ -1,0 +1,27 @@
+# Извлекаем смартфоны с операционной системой, страной производителя (напрямую или через manufacturer/brand), датой выпуска
+# Extracting smartphones with operating system, country of origin (directly or via manufacturer/brand), and release date
+SELECT DISTINCT ?smartphone ?smartphoneLabel ?countryLabel ?releaseDate ?osLabel ?manufacturerLabel
+WHERE {
+  ?smartphone wdt:P31 wd:Q19723451;  # экземпляр смартфона
+              wdt:P306 ?os.          # Операционная система
+  
+  # Страна производителя (несколько вариантов)
+  OPTIONAL {
+    # Вариант 1: Страна указана напрямую в объекте смартфона
+    ?smartphone wdt:P17 ?country.
+  }
+  OPTIONAL {
+    # Вариант 2: Страна через производителя (manufacturer P176)
+    ?smartphone wdt:P176 ?manufacturer.
+    ?manufacturer wdt:P17 ?country.
+  }
+  OPTIONAL {
+    # Вариант 3: Страна через бренд (brand P1716)
+    ?smartphone wdt:P1716 ?brand.
+    ?brand wdt:P17 ?country.
+  }
+ 
+  OPTIONAL {?smartphone wdt:P577 ?releaseDate.} # Дата выпуска (опционально)
+  
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "ru,en" } # Метки на русском и английском языках
+}
